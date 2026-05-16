@@ -83,43 +83,7 @@ focusflow-react/
 └── vite.config.js
 ```
 
----
-
-## 🚀 Como Executar
-
-### Pré-requisitos
-- Node.js instalado
-- npm ou yarn
-
-### Instalação
-
-```bash
-# Clone o repositório
-git clone https://github.com/crislainemlima1/prg04crislainemlima.git
-
-# Entre na pasta do projeto React
-cd focusflow-react
-
-# Instale as dependências
-npm install
-
-# Inicie o servidor de desenvolvimento
-npm run dev
-```
-
-Acesse em: `http://localhost:5173`
-
----
-
-## 🗺️ Roadmap
-
-- [x] Protótipo em HTML/CSS/JS
-- [x] Refatoração para React
-- [x] Componentização e roteamento
-- [ ] Integração com backend Java
-- [ ] Conexão com banco de dados MySQL
-- [ ] Integração com API de IA
-- [ ] Deploy em produção
+Acesse em: 
 
 ---
 
