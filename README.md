@@ -82,9 +82,9 @@ focusflow-react/
 ├── package.json
 └── vite.config.js
 ```
-
-Acesse em: 
-
+## 🔗 Deploy
+🚧 Projeto publicado na Vercel:
+https://prg04crislainemlima-frent-end.vercel.app/
 ---
 
 ## 👩‍💻 Autora
