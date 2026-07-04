@@ -1,0 +1,21 @@
+.login-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+.login-lado-esquerdo {
+  flex: 1;
+  background: var(--ff-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--ff-border);
+}
+
+.login-lado-direito {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}

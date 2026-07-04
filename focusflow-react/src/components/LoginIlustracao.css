@@ -1,0 +1,130 @@
+.il-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2.5rem;
+}
+
+/* Círculos decorativos de fundo */
+.il-circulo {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.08;
+  background: var(--ff-accent);
+}
+.il-circulo-1 {
+  width: 400px; height: 400px;
+  top: -100px; left: -100px;
+}
+.il-circulo-2 {
+  width: 300px; height: 300px;
+  bottom: -80px; right: -80px;
+  background: var(--ff-purple);
+  opacity: 0.12;
+}
+.il-circulo-3 {
+  width: 180px; height: 180px;
+  top: 40%; left: 60%;
+  background: var(--ff-green);
+  opacity: 0.07;
+}
+
+/* Linhas decorativas */
+.il-linha {
+  position: absolute;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(83, 52, 131, 0.3),
+    transparent
+  );
+  height: 1px;
+  width: 100%;
+}
+.il-linha-1 { top: 30%; }
+.il-linha-2 { top: 65%; }
+
+.il-conteudo {
+  position: relative;
+  z-index: 1;
+  max-width: 480px;
+}
+
+.il-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--ff-text);
+  margin-bottom: 2.5rem;
+}
+.il-logo span { color: var(--ff-accent); }
+
+.il-slogan {
+  font-size: 1rem;
+  color: var(--ff-green);
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.05em;
+}
+
+.il-titulo {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: var(--ff-text);
+  line-height: 1.15;
+  margin-bottom: 1.2rem;
+}
+.il-titulo span { color: var(--ff-accent); }
+
+.il-desc {
+  font-size: 0.95rem;
+  color: var(--ff-muted);
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  max-width: 380px;
+}
+
+.il-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.il-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--ff-border);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  transition: border-color 0.2s;
+}
+
+.il-card:hover {
+  border-color: var(--ff-purple);
+}
+
+.il-card-icone {
+  font-size: 1.4rem;
+}
+
+.il-card strong {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ff-text);
+  font-family: 'Syne', sans-serif;
+}
+
+.il-card p {
+  font-size: 0.78rem;
+  color: var(--ff-muted);
+  margin: 0;
+}

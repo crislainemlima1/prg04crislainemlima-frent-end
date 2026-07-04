@@ -1,16 +1,16 @@
-import Header from "../components/Header";
-import UserTable from "../components/UserTable";
-import Footer from "../components/Footer";
+import { Outlet } from 'react-router-dom';
+import Sidebar from '../components/Sidebar';
+import './Painel.css';
 
 function Painel() {
-    return (
-        <>
-        <Header/>
-        <main> <h2>Painel Admnistrativo</h2>
-        <UserTable/>
-        </main>
-        <Footer/>
-        </>
-    );
+  return (
+    <div className="painel-wrapper">
+      <Sidebar />
+      <main className="painel-main">
+        <Outlet />
+      </main>
+    </div>
+  );
 }
+
 export default Painel;

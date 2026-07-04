@@ -1,16 +1,18 @@
-import Header from "../components/Header";
-import LoginForm from "../components/LoginForm";
-import Footer from "../components/Footer";
+import LoginForm from '../components/LoginForm';
+import LoginIlustracao from '../components/LoginIlustracao';
+import './Login.css';
 
-function Login(){
-    return(
-        <>
-        <Header/>
-        <main>
-            <LoginForm/>
-        </main>
-        <Footer/>
-        </>
-    );
+function Login() {
+  return (
+    <div className="login-wrapper">
+      <div className="login-lado-esquerdo">
+        <LoginIlustracao />
+      </div>
+      <div className="login-lado-direito">
+        <LoginForm />
+      </div>
+    </div>
+  );
 }
+
 export default Login;
