@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import './LoginForm.css';
 
 function LoginForm() {
@@ -7,11 +8,35 @@ function LoginForm() {
   const [senha, setSenha] = useState('');
   const [verSenha, setVerSenha] = useState(false);
   const [lembrar, setLembrar] = useState(false);
+  const [carregando, setCarregando] = useState(false);
+  const [erro, setErro] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    navigate('/painel');
+    setErro('');
+    setCarregando(true);
+    try {
+      const resp = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, senha }),
+      });
+
+      if (!resp.ok) {
+        setErro('E-mail ou senha inválidos. Tente novamente.');
+        return;
+      }
+
+      const dados = await resp.json();
+      login(dados.usuario, dados.token);
+      navigate('/painel');
+    } catch {
+      setErro('Erro ao conectar com o servidor.');
+    } finally {
+      setCarregando(false);
+    }
   }
 
   return (
@@ -20,6 +45,20 @@ function LoginForm() {
         Bem-vindo de <span>volta!</span>
       </h2>
       <p className="lf-subtitulo">Acesse sua conta para continuar</p>
+
+      {erro && (
+        <div style={{
+          background: 'rgba(233,69,96,0.12)',
+          border: '1px solid var(--ff-accent)',
+          borderRadius: 10,
+          padding: '0.75rem 1rem',
+          color: 'var(--ff-accent)',
+          fontSize: '0.85rem',
+          marginBottom: '0.75rem',
+        }}>
+          ⚠ {erro}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="lf-form">
         <div className="lf-campo">
@@ -30,7 +69,7 @@ function LoginForm() {
               type="email"
               placeholder="seu@email.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => { setErro(''); setEmail(e.target.value); }}
               required
             />
           </div>
@@ -44,7 +83,7 @@ function LoginForm() {
               type={verSenha ? 'text' : 'password'}
               placeholder="Mínimo 8 caracteres"
               value={senha}
-              onChange={(e) => setSenha(e.target.value)}
+              onChange={(e) => { setErro(''); setSenha(e.target.value); }}
               required
             />
             <button
@@ -75,8 +114,8 @@ function LoginForm() {
           </button>
         </div>
 
-        <button type="submit" className="lf-btn-entrar">
-          → Entrar
+        <button type="submit" className="lf-btn-entrar" disabled={carregando}>
+          {carregando ? 'Entrando...' : '→ Entrar'}
         </button>
 
         <div className="lf-divisor">
@@ -101,7 +140,7 @@ function LoginForm() {
           <button
             type="button"
             className="lf-btn-criar"
-            onClick={() => alert('Em breve!')}
+            onClick={() => navigate('/cadastro')}
           >
             Criar conta
           </button>
