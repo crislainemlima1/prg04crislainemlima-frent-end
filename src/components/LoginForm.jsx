@@ -9,11 +9,13 @@ function LoginForm() {
   const [verSenha, setVerSenha] = useState(false);
   const [lembrar, setLembrar] = useState(false);
   const [carregando, setCarregando] = useState(false);
+  const [erro, setErro] = useState('');
   const navigate = useNavigate();
   const { login } = useAuth();
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setErro('');
     setCarregando(true);
     try {
       const resp = await fetch('/api/auth/login', {
@@ -23,7 +25,7 @@ function LoginForm() {
       });
 
       if (!resp.ok) {
-        alert('E-mail ou senha inválidos!');
+        setErro('E-mail ou senha inválidos. Tente novamente.');
         return;
       }
 
@@ -31,7 +33,7 @@ function LoginForm() {
       login(dados.usuario, dados.token);
       navigate('/painel');
     } catch {
-      alert('Erro ao conectar com o servidor.');
+      setErro('Erro ao conectar com o servidor.');
     } finally {
       setCarregando(false);
     }
@@ -44,6 +46,20 @@ function LoginForm() {
       </h2>
       <p className="lf-subtitulo">Acesse sua conta para continuar</p>
 
+      {erro && (
+        <div style={{
+          background: 'rgba(233,69,96,0.12)',
+          border: '1px solid var(--ff-accent)',
+          borderRadius: 10,
+          padding: '0.75rem 1rem',
+          color: 'var(--ff-accent)',
+          fontSize: '0.85rem',
+          marginBottom: '0.75rem',
+        }}>
+          ⚠ {erro}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="lf-form">
         <div className="lf-campo">
           <label>E-MAIL</label>
@@ -53,7 +69,7 @@ function LoginForm() {
               type="email"
               placeholder="seu@email.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => { setErro(''); setEmail(e.target.value); }}
               required
             />
           </div>
@@ -67,7 +83,7 @@ function LoginForm() {
               type={verSenha ? 'text' : 'password'}
               placeholder="Mínimo 8 caracteres"
               value={senha}
-              onChange={(e) => setSenha(e.target.value)}
+              onChange={(e) => { setErro(''); setSenha(e.target.value); }}
               required
             />
             <button
@@ -98,11 +114,7 @@ function LoginForm() {
           </button>
         </div>
 
-        <button
-          type="submit"
-          className="lf-btn-entrar"
-          disabled={carregando}
-        >
+        <button type="submit" className="lf-btn-entrar" disabled={carregando}>
           {carregando ? 'Entrando...' : '→ Entrar'}
         </button>
 
@@ -128,7 +140,7 @@ function LoginForm() {
           <button
             type="button"
             className="lf-btn-criar"
-            onClick={() => alert('Em breve!')}
+            onClick={() => navigate('/cadastro')}
           >
             Criar conta
           </button>
