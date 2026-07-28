@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { api } from '../api';
 import './LoginForm.css';
 
 function LoginForm() {
@@ -18,17 +19,15 @@ function LoginForm() {
     setErro('');
     setCarregando(true);
     try {
-      const resp = await fetch('/api/auth/login', {
+      const resp = await api('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, senha }),
       });
-
       if (!resp.ok) {
         setErro('E-mail ou senha inválidos. Tente novamente.');
         return;
       }
-
       const dados = await resp.json();
       login(dados.usuario, dados.token);
       navigate('/painel');
@@ -41,21 +40,11 @@ function LoginForm() {
 
   return (
     <div className="lf-card">
-      <h2 className="lf-titulo">
-        Bem-vindo de <span>volta!</span>
-      </h2>
+      <h2 className="lf-titulo">Bem-vindo de <span>volta!</span></h2>
       <p className="lf-subtitulo">Acesse sua conta para continuar</p>
 
       {erro && (
-        <div style={{
-          background: 'rgba(233,69,96,0.12)',
-          border: '1px solid var(--ff-accent)',
-          borderRadius: 10,
-          padding: '0.75rem 1rem',
-          color: 'var(--ff-accent)',
-          fontSize: '0.85rem',
-          marginBottom: '0.75rem',
-        }}>
+        <div style={{ background: 'rgba(233,69,96,0.12)', border: '1px solid var(--ff-accent)', borderRadius: 10, padding: '0.75rem 1rem', color: 'var(--ff-accent)', fontSize: '0.85rem', marginBottom: '0.75rem' }}>
           ⚠ {erro}
         </div>
       )}
@@ -65,13 +54,7 @@ function LoginForm() {
           <label>E-MAIL</label>
           <div className="lf-input-wrap">
             <span className="lf-icone">✉</span>
-            <input
-              type="email"
-              placeholder="seu@email.com"
-              value={email}
-              onChange={(e) => { setErro(''); setEmail(e.target.value); }}
-              required
-            />
+            <input type="email" placeholder="seu@email.com" value={email} onChange={(e) => { setErro(''); setEmail(e.target.value); }} required />
           </div>
         </div>
 
@@ -79,18 +62,8 @@ function LoginForm() {
           <label>SENHA</label>
           <div className="lf-input-wrap">
             <span className="lf-icone">🔒</span>
-            <input
-              type={verSenha ? 'text' : 'password'}
-              placeholder="Mínimo 8 caracteres"
-              value={senha}
-              onChange={(e) => { setErro(''); setSenha(e.target.value); }}
-              required
-            />
-            <button
-              type="button"
-              className="lf-ver-senha"
-              onClick={() => setVerSenha((v) => !v)}
-            >
+            <input type={verSenha ? 'text' : 'password'} placeholder="Mínimo 8 caracteres" value={senha} onChange={(e) => { setErro(''); setSenha(e.target.value); }} required />
+            <button type="button" className="lf-ver-senha" onClick={() => setVerSenha((v) => !v)}>
               {verSenha ? '🙈' : '👁'}
             </button>
           </div>
@@ -98,18 +71,10 @@ function LoginForm() {
 
         <div className="lf-linha-opcoes">
           <label className="lf-lembrar">
-            <input
-              type="checkbox"
-              checked={lembrar}
-              onChange={(e) => setLembrar(e.target.checked)}
-            />
+            <input type="checkbox" checked={lembrar} onChange={(e) => setLembrar(e.target.checked)} />
             Lembrar de mim
           </label>
-          <button
-            type="button"
-            className="lf-esqueceu"
-            onClick={() => alert('Em breve!')}
-          >
+          <button type="button" className="lf-esqueceu" onClick={() => alert('Em breve!')}>
             Esqueci minha senha
           </button>
         </div>
@@ -118,16 +83,10 @@ function LoginForm() {
           {carregando ? 'Entrando...' : '→ Entrar'}
         </button>
 
-        <div className="lf-divisor">
-          <span>ou continue com</span>
-        </div>
+        <div className="lf-divisor"><span>ou continue com</span></div>
 
         <div className="lf-social">
-          <button
-            type="button"
-            className="lf-btn-google"
-            onClick={() => alert('Em breve!')}
-          >
+          <button type="button" className="lf-btn-google" onClick={() => alert('Em breve!')}>
             <svg width="18" height="18" viewBox="0 0 48 48">
               <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
               <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
@@ -137,18 +96,12 @@ function LoginForm() {
             </svg>
             Google
           </button>
-          <button
-            type="button"
-            className="lf-btn-criar"
-            onClick={() => navigate('/cadastro')}
-          >
+          <button type="button" className="lf-btn-criar" onClick={() => navigate('/cadastro')}>
             Criar conta
           </button>
         </div>
 
-        <p className="lf-seguranca">
-          🔒 Seus dados estão protegidos com segurança
-        </p>
+        <p className="lf-seguranca">🔒 Seus dados estão protegidos com segurança</p>
       </form>
     </div>
   );

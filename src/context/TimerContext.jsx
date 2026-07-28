@@ -1,8 +1,8 @@
 import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { useAuth } from './AuthContext';
+import { api } from '../api';
 
 const TimerContext = createContext(null);
-
 const FOCO = 25 * 60;
 const PAUSA = 5 * 60;
 
@@ -15,20 +15,17 @@ export function TimerProvider({ children }) {
   const [materiaId, setMateriaId] = useState(null);
   const [materias, setMaterias] = useState([]);
   const intervalRef = useRef(null);
-
   const totalSegundos = modo === 'foco' ? FOCO : PAUSA;
 
   useEffect(() => {
     if (usuario?.id && token) {
-      fetch(`/api/materias/usuario/${usuario.id}`, {
+      api(`/api/materias/usuario/${usuario.id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((r) => r.json())
         .then((dados) => {
           setMaterias(dados);
-          if (dados.length > 0 && !materiaId) {
-            setMateriaId(dados[0].id);
-          }
+          if (dados.length > 0 && !materiaId) setMateriaId(dados[0].id);
         })
         .catch(() => {});
     }
@@ -41,10 +38,7 @@ export function TimerProvider({ children }) {
           if (prev <= 1) {
             clearInterval(intervalRef.current);
             setRodando(false);
-            if (modo === 'foco') {
-              setPomodorosFeitos((p) => p + 1);
-              salvarSessao();
-            }
+            if (modo === 'foco') { setPomodorosFeitos((p) => p + 1); salvarSessao(); }
             return 0;
           }
           return prev - 1;
@@ -57,17 +51,10 @@ export function TimerProvider({ children }) {
   async function salvarSessao() {
     if (!materiaId || !token) return;
     try {
-      await fetch('/api/sessoes', {
+      await api('/api/sessoes', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          materiaId,
-          duracaoMinutos: 25,
-          data: new Date().toISOString().split('T')[0],
-        }),
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ materiaId, duracaoMinutos: 25, data: new Date().toISOString().split('T')[0] }),
       });
     } catch {}
   }
@@ -86,17 +73,10 @@ export function TimerProvider({ children }) {
   }
 
   return (
-    <TimerContext.Provider value={{
-      modo, segundos, rodando, setRodando,
-      pomodorosFeitos, totalSegundos,
-      materiaId, setMateriaId, materias,
-      alternarModo, resetar,
-    }}>
+    <TimerContext.Provider value={{ modo, segundos, rodando, setRodando, pomodorosFeitos, totalSegundos, materiaId, setMateriaId, materias, alternarModo, resetar }}>
       {children}
     </TimerContext.Provider>
   );
 }
 
-export function useTimer() {
-  return useContext(TimerContext);
-}
+export function useTimer() { return useContext(TimerContext); }
