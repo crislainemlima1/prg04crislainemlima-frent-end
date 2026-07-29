@@ -15,6 +15,8 @@ export function TimerProvider({ children }) {
   const [materiaId, setMateriaId] = useState(null);
   const [materias, setMaterias] = useState([]);
   const intervalRef = useRef(null);
+  const sessaoSalvaRef = useRef(false); // ← impede duplo save
+
   const totalSegundos = modo === 'foco' ? FOCO : PAUSA;
 
   useEffect(() => {
@@ -33,12 +35,17 @@ export function TimerProvider({ children }) {
 
   useEffect(() => {
     if (rodando) {
+      sessaoSalvaRef.current = false; // reseta ao iniciar
       intervalRef.current = setInterval(() => {
         setSegundos((prev) => {
           if (prev <= 1) {
             clearInterval(intervalRef.current);
             setRodando(false);
-            if (modo === 'foco') { setPomodorosFeitos((p) => p + 1); salvarSessao(); }
+            if (modo === 'foco' && !sessaoSalvaRef.current) {
+              sessaoSalvaRef.current = true; // marca como salvo
+              setPomodorosFeitos((p) => p + 1);
+              salvarSessao();
+            }
             return 0;
           }
           return prev - 1;
@@ -54,7 +61,11 @@ export function TimerProvider({ children }) {
       await api('/api/sessoes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ materiaId, duracaoMinutos: 25, data: new Date().toISOString().split('T')[0] }),
+        body: JSON.stringify({
+          materiaId,
+          duracaoMinutos: 25,
+          data: new Date().toISOString().split('T')[0],
+        }),
       });
     } catch {}
   }
@@ -73,7 +84,12 @@ export function TimerProvider({ children }) {
   }
 
   return (
-    <TimerContext.Provider value={{ modo, segundos, rodando, setRodando, pomodorosFeitos, totalSegundos, materiaId, setMateriaId, materias, alternarModo, resetar }}>
+    <TimerContext.Provider value={{
+      modo, segundos, rodando, setRodando,
+      pomodorosFeitos, totalSegundos,
+      materiaId, setMateriaId, materias,
+      alternarModo, resetar,
+    }}>
       {children}
     </TimerContext.Provider>
   );
